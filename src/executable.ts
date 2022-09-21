@@ -30,7 +30,7 @@ const reportGenerateConfig: ReportGeneratorConfig = {
 async function execute(reportGenerateConfig: ReportGeneratorConfig) {
   try {
     const generator = new ReportGenerator(reportGenerateConfig);
-    console.log(`Generating Security report for ${reportGenerateConfig.repository} (v0.1)...`);
+    console.log(`Generating Security report for ${reportGenerateConfig.repository} (v0.3)...`);
     const file = await generator.run();
     console.log(`Summary Report generated: ${file}`);
 
