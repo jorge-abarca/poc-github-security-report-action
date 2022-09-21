@@ -801,7 +801,13 @@ function getRules(report) {
                         console.log("Running fallback...");
                         run.tool.extensions.forEach(extension => {
                             console.log("Pushing extension rules...");
-                            sarifRules.push(...extension.rules);
+                            if (extension.rules != null) {
+                                console.log("Extension rules are not null...");
+                                sarifRules.push(...extension.rules);
+                            }
+                            else {
+                                console.log("Extension rules are null!");
+                            }
                         });
                         console.log("Added rules defined in extensions!");
                     }
