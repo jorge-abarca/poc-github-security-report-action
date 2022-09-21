@@ -18,6 +18,8 @@ async function run(): Promise<void> {
         name: getRequiredInputValue('template')
       }
     });
+    
+    console.log("Running gnerator...");
 
     const file = await generator.run();
     console.log(file);
