@@ -23,6 +23,8 @@ export default class SarifReport {
 
 function getRules(report: SarifReportData) {
   let sarifRules: SarifRule[] = [];
+  
+  console.log("getting sarif rules...");
 
   if (report.version === '2.1.0') {
     if (report.runs) {
@@ -55,6 +57,7 @@ function getRules(report: SarifReportData) {
 
 function getAppliedRuleDetails(sarifRules: SarifRule[] | null): CodeScanningRule[] | null {
   if (sarifRules) {
+    console.log("getting applied rule details...");
     return sarifRules.map(rule => {
       return new CodeScanningRule(rule)
     });
