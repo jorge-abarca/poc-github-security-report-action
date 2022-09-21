@@ -39,6 +39,8 @@ export default class DataCollector {
       , codeScanning = new GitHubCodeScanning(this.octokit)
       , sarifFinder = new SarifReportFinder(sarifReportDir)
     ;
+    
+    console.log("collecting data...");
 
     return Promise.all([
       sarifFinder.getSarifFiles(),
