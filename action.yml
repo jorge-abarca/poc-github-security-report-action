@@ -1,0 +1,36 @@
+name: GitHub Security Report Action
+description: Generates security reports for a GitHub repository
+author: Peter Murray
+
+inputs:
+  token:
+    description: GitHub Access Token with permissions for Dependencies and Security API access on the repository.
+    required: true
+
+  sarifReportDir:
+    description: The CodeQL output directory for SARIF report(s).
+    required: true
+    default: "../results"
+
+  outputDir:
+    description: The output directory for the generated report(s).
+    required: true
+    default: ${{ github.workspace }}
+
+  repository:
+    description: Repository name with owner. For example, peter-murray/github-security-report
+    required: true
+    default: ${{ github.repository }}
+  
+  template:
+    description: Select the report template type you want to use. For example, `summary` or `report`.
+    required: false
+    default: summary
+
+runs:
+  using: node12
+  main: dist/index.js
+
+branding:
+  icon: shield
+  color: green
