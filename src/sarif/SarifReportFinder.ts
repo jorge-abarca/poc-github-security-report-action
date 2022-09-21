@@ -24,7 +24,7 @@ export default class SarifReportFinder {
       throw new Error(`SARIF Finder, path "${dir}", does not exist.`);
     }
 
-    console.log(`SARIF File Finder, processing: ${dir}`);
+    console.log(`SARIF File Finder, processing: "${dir}"...`);
     if (fs.lstatSync(dir).isDirectory()) {
       console.log(`  is a directory, looking for files`);
 
