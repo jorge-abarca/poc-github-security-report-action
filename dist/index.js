@@ -38,7 +38,6 @@ class DataCollector {
     }
     getPayload(sarifReportDir) {
         const ghDeps = new GitHubDependencies_1.default(this.octokit), codeScanning = new GitHubCodeScanning_1.default(this.octokit), sarifFinder = new SarifReportFinder_1.default(sarifReportDir);
-        console.log("collecting data...");
         return Promise.all([
             sarifFinder.getSarifFiles(),
             ghDeps.getAllDependencies(this.repo),
@@ -106,11 +105,9 @@ class ReportGenerator {
         return collector.getPayload(config.sarifReportDirectory)
             .then(reportData => {
             const reportTemplate = new Template_1.default(config.templating.directory);
-            console.log("rendering report...");
             return reportTemplate.render(reportData.getJSONPayload(), config.templating.name);
         })
             .then(html => {
-            console.log("storing report...");
             return io_1.mkdirP(config.outputDirectory)
                 .then(() => {
                 return pdfWriter_1.createPDF(html, path.join(config.outputDirectory, config.templating.name + '.pdf'));
@@ -629,7 +626,6 @@ function run() {
                     name: getRequiredInputValue('template')
                 }
             });
-            console.log("Running gnerator...");
             const file = yield generator.run();
             console.log(file);
         }
@@ -744,13 +740,11 @@ class CodeScanningRule {
 }
 exports["default"] = CodeScanningRule;
 function getCWEs(tags) {
-    console.log("getting CWE...");
     const cwes = [];
     if (tags) {
         tags.forEach(tag => {
             const match = CWE_REGEX.exec(tag);
             if (match) {
-                console.log("pushing CWE...");
                 // @ts-ignore
                 cwes.push(match[1]);
             }
@@ -787,7 +781,6 @@ class SarifReport {
 exports["default"] = SarifReport;
 function getRules(report) {
     let sarifRules = [];
-    console.log("getting sarif rules...");
     if (report.version === '2.1.0') {
         if (report.runs) {
             report.runs.forEach(run => {
@@ -798,18 +791,11 @@ function getRules(report) {
                     }
                     // Fallback for when the rules are defined in the extensions:
                     if (run.tool.extensions) {
-                        console.log("Running fallback...");
                         run.tool.extensions.forEach(extension => {
-                            console.log("Pushing extension rules...");
                             if (extension.rules != null) {
-                                console.log("Extension rules are not null...");
                                 sarifRules.push(...extension.rules);
                             }
-                            else {
-                                console.log("Extension rules are null!");
-                            }
                         });
-                        console.log("Added rules defined in extensions!");
                     }
                 }
             });
@@ -822,7 +808,6 @@ function getRules(report) {
 }
 function getAppliedRuleDetails(sarifRules) {
     if (sarifRules) {
-        console.log("getting applied rule details...");
         return sarifRules.map(rule => {
             return new CodeScanningRule_1.default(rule);
         });
@@ -878,7 +863,7 @@ class SarifReportFinder {
         if (!fs.existsSync(dir)) {
             throw new Error(`SARIF Finder, path "${dir}", does not exist.`);
         }
-        console.log(`SARIF File Finder, processing: "${dir}"...`);
+        console.log(`SARIF File Finder, processing: ${dir}`);
         if (fs.lstatSync(dir).isDirectory()) {
             console.log(`  is a directory, looking for files`);
             const files = fs.readdirSync(dir) // TODO use promises here
@@ -901,10 +886,8 @@ class SarifReportFinder {
 }
 exports["default"] = SarifReportFinder;
 function loadFileContents(file) {
-    console.log("loading file " + file + "...");
     return fs.promises.open(file, 'r')
         .then(fileHandle => {
-        console.log("reading file " + file + "...");
         return fileHandle.readFile()
             .then(content => {
             fileHandle.close();
@@ -916,7 +899,6 @@ function loadFileContents(file) {
             }
         })
             .then(data => {
-            console.log("creating new sarif report...");
             return {
                 file: file,
                 payload: new SarifReport_1.default(data),
