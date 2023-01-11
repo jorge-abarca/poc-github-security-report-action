@@ -34,11 +34,9 @@ export default class ReportGenerator {
     return collector.getPayload(config.sarifReportDirectory)
       .then(reportData => {
         const reportTemplate = new Template(config.templating.directory);
-        console.log("rendering report...");
         return reportTemplate.render(reportData.getJSONPayload(), config.templating.name);
       })
       .then(html => {
-        console.log("storing report...");
         return mkdirP(config.outputDirectory)
           .then(() => {
             return createPDF(html, path.join(config.outputDirectory, config.templating.name + '.pdf'));
