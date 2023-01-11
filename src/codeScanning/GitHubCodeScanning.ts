@@ -37,10 +37,13 @@ function getCodeScanning(octokit: Octokit,
     repo: repo.repo,
     state: state
   };
+  
+  console.log("Get Code Scanning Alerts for:", params);
 
   return octokit.paginate('GET /repos/:owner/:repo/code-scanning/alerts', params)
     //@ts-ignore
     .then((alerts: CodeScanningListAlertsForRepoResponseData) => {
+      console.log("Response received for:", params);
       const results: CodeScanningResults = new CodeScanningResults();
 
       alerts.forEach((alert: CodeScanningData) => {
