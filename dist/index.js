@@ -493,7 +493,7 @@ class GitHubDependencies {
             let testEndCursor = null;
             do {
                 console.log("Performing GraphQL query...");
-                const graphqlParameters = buildGraphQLParameters(query, parameters, headers), queryResult = yield octokit.graphql(graphqlParameters);
+                const graphqlParameters = buildGraphQLParameters(query, queryParameters, headers), queryResult = yield octokit.graphql(graphqlParameters);
                 // @ts-ignore
                 const extracted = extractResultsFn(queryResult);
                 // @ts-ignore
