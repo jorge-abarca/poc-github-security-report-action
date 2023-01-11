@@ -81,7 +81,7 @@ export default class GitHubDependencies {
     let testEndCursor = null;
     do {
       console.log("Performing GraphQL query...");
-      const graphqlParameters = buildGraphQLParameters(query, parameters, headers)
+      const graphqlParameters = buildGraphQLParameters(query, queryParameters, headers)
         , queryResult = await octokit.graphql(graphqlParameters)
       ;
 
