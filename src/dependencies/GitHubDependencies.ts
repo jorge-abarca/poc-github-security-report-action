@@ -27,9 +27,11 @@ export default class GitHubDependencies {
 
   async getAllVulnerabilities(repo: Repo): Promise<Vulnerability[]> {
     function extractVulnerabilityAlerts(data: RepositoryVulnerabilityAlerts): VulnerabilityAlert[] {
+      console.log("extracting vulnerabilities...);
       return data.repository.vulnerabilityAlerts.nodes;
     }
-
+    
+    console.log("Getting all vulnerabilities of the repository...");
     const data: VulnerabilityAlert[] = await this.getPaginatedQuery<RepositoryVulnerabilityAlerts, VulnerabilityAlert>(
       QUERY_SECURITY_VULNERABILITIES,
       {organizationName: repo.owner, repositoryName: repo.repo},
@@ -44,9 +46,11 @@ export default class GitHubDependencies {
 
   async getAllDependencies(repo: Repo): Promise<DependencySet[]> {
     function extractDependencySetData(data: DependencyGraphResult): DependencySetData[] {
+      console.log("extracting dependencies...);
       return data.repository.dependencyGraphManifests.edges;
     }
 
+    console.log("Getting all dependencies of the repository...");
     const data = await this.getPaginatedQuery(
       QUERY_DEPENDENCY_GRAPH,
       {organizationName: repo.owner, repositoryName: repo.repo},
@@ -69,9 +73,13 @@ export default class GitHubDependencies {
       , results: Y[] = []
       , queryParameters = Object.assign({cursor: null}, parameters)
     ;
+    
+    console.log("getPaginatedQuery for " + query + "...");
+    console.log("parameters" ", parameters);
 
     let hasNextPage = false;
     do {
+      console.log("Performing GraphQL query...");
       const graphqlParameters = buildGraphQLParameters(query, parameters, headers)
         , queryResult = await octokit.graphql(graphqlParameters)
       ;
@@ -85,8 +93,11 @@ export default class GitHubDependencies {
       hasNextPage = pageInfo ? pageInfo.hasNextPage : false;
       if (hasNextPage) {
         queryParameters.cursor = pageInfo.endCursor;
+        console.log("Next page found, paging...");
       }
     } while (hasNextPage);
+  
+    console.log("returning results of paginated query...");
 
     return results;
   }
