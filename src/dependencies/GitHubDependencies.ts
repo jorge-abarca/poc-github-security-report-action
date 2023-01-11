@@ -27,7 +27,7 @@ export default class GitHubDependencies {
 
   async getAllVulnerabilities(repo: Repo): Promise<Vulnerability[]> {
     function extractVulnerabilityAlerts(data: RepositoryVulnerabilityAlerts): VulnerabilityAlert[] {
-      console.log("extracting vulnerabilities...);
+      console.log("extracting vulnerabilities...");
       return data.repository.vulnerabilityAlerts.nodes;
     }
     
