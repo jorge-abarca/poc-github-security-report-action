@@ -75,7 +75,7 @@ export default class GitHubDependencies {
     ;
     
     console.log("getPaginatedQuery for " + query + "...");
-    console.log("parameters" ", parameters);
+    console.log("parameters", parameters);
 
     let hasNextPage = false;
     do {
