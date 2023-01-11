@@ -46,7 +46,7 @@ export default class GitHubDependencies {
 
   async getAllDependencies(repo: Repo): Promise<DependencySet[]> {
     function extractDependencySetData(data: DependencyGraphResult): DependencySetData[] {
-      console.log("extracting dependencies...);
+      console.log("extracting dependencies...");
       return data.repository.dependencyGraphManifests.edges;
     }
 
