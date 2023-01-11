@@ -253,9 +253,11 @@ function getCodeScanning(octokit, repo, state) {
         repo: repo.repo,
         state: state
     };
+    console.log("Get Code Scanning Alerts for:", params);
     return octokit.paginate('GET /repos/:owner/:repo/code-scanning/alerts', params)
         //@ts-ignore
         .then((alerts) => {
+        console.log("Response received for:", params);
         const results = new CodeScanningResults_1.default();
         alerts.forEach((alert) => {
             results.addCodeScanningAlert(new CodeScanningAlert_1.default(alert));
@@ -459,8 +461,10 @@ class GitHubDependencies {
     getAllVulnerabilities(repo) {
         return __awaiter(this, void 0, void 0, function* () {
             function extractVulnerabilityAlerts(data) {
+                console.log("extracting vulnerabilities...");
                 return data.repository.vulnerabilityAlerts.nodes;
             }
+            console.log("Getting all vulnerabilities of the repository...");
             const data = yield this.getPaginatedQuery(DependencyTypes_1.QUERY_SECURITY_VULNERABILITIES, { organizationName: repo.owner, repositoryName: repo.repo }, 'repository.vulnerabilityAlerts.pageInfo', extractVulnerabilityAlerts);
             return data.map(val => {
                 return new Vulnerability_1.default(val);
@@ -470,8 +474,10 @@ class GitHubDependencies {
     getAllDependencies(repo) {
         return __awaiter(this, void 0, void 0, function* () {
             function extractDependencySetData(data) {
+                console.log("extracting dependencies...");
                 return data.repository.dependencyGraphManifests.edges;
             }
+            console.log("Getting all dependencies of the repository...");
             const data = yield this.getPaginatedQuery(DependencyTypes_1.QUERY_DEPENDENCY_GRAPH, { organizationName: repo.owner, repositoryName: repo.repo }, 'repository.dependencyGraphManifests.pageInfo', extractDependencySetData, { accept: 'application/vnd.github.hawkgirl-preview+json' });
             return data.map(node => {
                 return new DependencySet_1.default(node);
@@ -481,8 +487,11 @@ class GitHubDependencies {
     getPaginatedQuery(query, parameters, pageInfoPath, extractResultsFn, headers) {
         return __awaiter(this, void 0, void 0, function* () {
             const octokit = this.octokit, results = [], queryParameters = Object.assign({ cursor: null }, parameters);
+            console.log("getPaginatedQuery for " + query + "...");
+            console.log("parameters", parameters);
             let hasNextPage = false;
             do {
+                console.log("Performing GraphQL query...");
                 const graphqlParameters = buildGraphQLParameters(query, parameters, headers), queryResult = yield octokit.graphql(graphqlParameters);
                 // @ts-ignore
                 const extracted = extractResultsFn(queryResult);
@@ -492,8 +501,10 @@ class GitHubDependencies {
                 hasNextPage = pageInfo ? pageInfo.hasNextPage : false;
                 if (hasNextPage) {
                     queryParameters.cursor = pageInfo.endCursor;
+                    console.log("Next page found, paging...");
                 }
             } while (hasNextPage);
+            console.log("returning results of paginated query...");
             return results;
         });
     }
@@ -675,23 +686,42 @@ exports.createPDF = void 0;
 const os = __importStar(__nccwpck_require__(2037));
 const puppeteer = __nccwpck_require__(6478);
 function createPDF(html, file) {
+    console.time("save pdf");
+    console.time("download");
+    console.log("Creating pdf...", file);
     const fetcher = puppeteer.createBrowserFetcher({ path: os.tmpdir() });
     return fetcher.download('782078') //TODO need to store and inject this
         .then(revisionInfo => {
+        console.log("Downloaded...", fetcher);
+        console.timeEnd("download");
+        console.log("Launching...");
+        console.time("launch");
         return puppeteer.launch({ executablePath: revisionInfo.executablePath })
             .then(browser => {
+            console.log("launched!");
+            console.timeEnd("launch");
+            console.log("Creating new page...");
+            console.time("browser.newPage();");
             return browser.newPage()
                 .then(page => {
+                console.timeEnd("browser.newPage();");
+                console.log("Setting content...");
+                console.time("set content");
                 return page.setContent(html)
                     .then(() => {
+                    console.timeEnd("set content");
+                    console.log("Saving as pdf...");
+                    console.timeEnd("save pdf");
                     return page.pdf({ path: file, format: 'A4' });
                 });
             })
                 .then(() => {
+                console.log("Closing browser...");
                 return browser.close();
             });
         })
             .then(() => {
+            console.log("Returning file..");
             return file;
         });
     });
@@ -744,7 +774,7 @@ class CodeScanningRule {
 }
 exports["default"] = CodeScanningRule;
 function getCWEs(tags) {
-    console.log("getting CWE...");
+    console.log("getting CWEs...");
     const cwes = [];
     if (tags) {
         tags.forEach(tag => {
@@ -756,6 +786,7 @@ function getCWEs(tags) {
             }
         });
     }
+    console.log("returning CWEs...");
     return cwes.sort();
 }
 
