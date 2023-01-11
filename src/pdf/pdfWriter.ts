@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer-core');
 
 export function createPDF(html: string, file: string): Promise<string> {
   
-  console.log("Creating pdf...", file);
+  //console.log("Creating pdf...", file);
 
   const fetcher = puppeteer.createBrowserFetcher({path: os.tmpdir()});
 
