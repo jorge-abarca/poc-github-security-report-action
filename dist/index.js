@@ -490,6 +490,7 @@ class GitHubDependencies {
             console.log("getPaginatedQuery for " + query + "...");
             console.log("parameters", parameters);
             let hasNextPage = false;
+            let testEndCursor = null;
             do {
                 console.log("Performing GraphQL query...");
                 const graphqlParameters = buildGraphQLParameters(query, parameters, headers), queryResult = yield octokit.graphql(graphqlParameters);
@@ -501,7 +502,15 @@ class GitHubDependencies {
                 hasNextPage = pageInfo ? pageInfo.hasNextPage : false;
                 if (hasNextPage) {
                     queryParameters.cursor = pageInfo.endCursor;
-                    console.log("Next page found, paging...");
+                    console.log("Next page found, paging...", pageInfo.endCursor);
+                    if (testEndCursor == null) {
+                        testEndCursor = pageInfo.endCursor;
+                    }
+                    else if (testEndCursor == pageInfo.endCursor) {
+                        console.log("******************************************** EXCEPTION: *************************************************");
+                        console.log("endCursor repeated: ", pageInfo.endCursor);
+                        break;
+                    }
                 }
             } while (hasNextPage);
             console.log("returning results of paginated query...");
