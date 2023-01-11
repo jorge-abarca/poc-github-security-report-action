@@ -23,8 +23,6 @@ export default class SarifReport {
 
 function getRules(report: SarifReportData) {
   let sarifRules: SarifRule[] = [];
-  
-  console.log("getting sarif rules...");
 
   if (report.version === '2.1.0') {
     if (report.runs) {
@@ -37,17 +35,11 @@ function getRules(report: SarifReportData) {
 
           // Fallback for when the rules are defined in the extensions:
           if (run.tool.extensions) {
-            console.log("Running fallback...");
             run.tool.extensions.forEach(extension => {
-              console.log("Pushing extension rules...");
               if (extension.rules != null) {
-                console.log("Extension rules are not null...");
                 sarifRules.push(...extension.rules);
-              } else {
-                console.log("Extension rules are null!");
               }
             });
-            console.log("Added rules defined in extensions!");
           }
         }
       });
@@ -62,7 +54,6 @@ function getRules(report: SarifReportData) {
 
 function getAppliedRuleDetails(sarifRules: SarifRule[] | null): CodeScanningRule[] | null {
   if (sarifRules) {
-    console.log("getting applied rule details...");
     return sarifRules.map(rule => {
       return new CodeScanningRule(rule)
     });

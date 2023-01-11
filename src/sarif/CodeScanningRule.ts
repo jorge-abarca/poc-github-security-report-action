@@ -51,7 +51,6 @@ export default class CodeScanningRule {
 }
 
 function getCWEs(tags: string[]): string[] {
-  console.log("getting CWE...");
   const cwes: string[] = [];
 
   if (tags) {
@@ -59,7 +58,6 @@ function getCWEs(tags: string[]): string[] {
       const match = CWE_REGEX.exec(tag);
 
       if (match) {
-        console.log("pushing CWE...");
         // @ts-ignore
         cwes.push(match[1]);
       }

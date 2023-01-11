@@ -24,7 +24,7 @@ export default class SarifReportFinder {
       throw new Error(`SARIF Finder, path "${dir}", does not exist.`);
     }
 
-    console.log(`SARIF File Finder, processing: "${dir}"...`);
+    console.log(`SARIF File Finder, processing: ${dir}`);
     if (fs.lstatSync(dir).isDirectory()) {
       console.log(`  is a directory, looking for files`);
 
@@ -49,10 +49,8 @@ export default class SarifReportFinder {
 }
 
 function loadFileContents(file: string): Promise<SarifFile> {
-  console.log("loading file " + file + "...");
   return fs.promises.open(file, 'r')
     .then(fileHandle => {
-      console.log("reading file " + file + "...");
       return fileHandle.readFile()
         .then(content => {
           fileHandle.close();
@@ -63,7 +61,6 @@ function loadFileContents(file: string): Promise<SarifFile> {
           }
         })
         .then(data => {
-          console.log("creating new sarif report...");
           return {
             file: file,
             payload: new SarifReport(data),
