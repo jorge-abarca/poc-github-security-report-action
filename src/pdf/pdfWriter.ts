@@ -22,10 +22,10 @@ export function createPDF(html: string, file: string): Promise<string> {
           console.log("launched!");
           console.timeEnd("launch");
           console.log("Creating new page...");
-          console.time("newpage");
+          console.time("browser.newPage();");
           return browser.newPage()
             .then(page => {
-              console.timeEnd("newpage");
+              console.timeEnd("browser.newPage();");
               console.log("Setting content...");
               console.time("set content");
               return page.setContent(html)
