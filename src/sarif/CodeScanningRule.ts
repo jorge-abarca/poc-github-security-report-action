@@ -51,7 +51,7 @@ export default class CodeScanningRule {
 }
 
 function getCWEs(tags: string[]): string[] {
-  console.log("getting CWE...");
+  console.log("getting CWEs...");
   const cwes: string[] = [];
 
   if (tags) {
@@ -65,6 +65,7 @@ function getCWEs(tags: string[]): string[] {
       }
     });
   }
-
+  
+  console.log("returning CWEs...");
   return cwes.sort();
 }
