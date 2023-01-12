@@ -63,5 +63,9 @@ export function createPDF(html: string, file: string): Promise<string> {
           console.error(error);
           return Promise.reject(error);
         });
+    })
+    .catch((error) => {
+        console.error(error);
+        return Promise.reject(error);
     });
 };
