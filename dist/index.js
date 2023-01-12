@@ -636,6 +636,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const ReportGenerator_1 = __importDefault(__nccwpck_require__(9597));
 const core = __importStar(__nccwpck_require__(5250));
 const rest_1 = __nccwpck_require__(6738);
+// Test, remove:
+const pdfWriter_1 = __nccwpck_require__(1177);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -649,11 +651,16 @@ function run() {
                     name: getRequiredInputValue('template')
                 }
             });
-            console.log("Running gnerator...");
+            console.log("Running gnerator v0.8...");
+            // Test PDF:
+            console.log("creating test pdf...");
+            yield pdfWriter_1.createPDF('<html><body><h1>Hello World</h1></body>', 'test.pdf');
+            console.log("done...");
             const file = yield generator.run();
-            console.log(file);
+            console.log("generated report: ", file);
         }
         catch (err) {
+            console.error(err);
             core.setFailed(err.message);
         }
     });
