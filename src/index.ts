@@ -3,6 +3,9 @@ import ReportGenerator from './ReportGenerator';
 import * as core from '@actions/core';
 import { Octokit } from '@octokit/rest';
 
+// Test, remove:
+import { createPDF } from 'pdf/pdfWriter';
+
 async function run(): Promise<void> {
   try {
     const token = getRequiredInputValue('token');
@@ -19,11 +22,17 @@ async function run(): Promise<void> {
       }
     });
     
-    console.log("Running gnerator...");
+    console.log("Running gnerator v0.8...");
+    
+    // Test PDF:
+    console.log("creating test pdf...");
+    await createPDF('<html><body><h1>Hello World</h1></body>', 'test.pdf');
+    console.log("done...");
 
     const file = await generator.run();
-    console.log(file);
+    console.log("generated report: ", file);
   } catch (err) {
+    console.error(err);
     core.setFailed(err.message);
   }
 }
