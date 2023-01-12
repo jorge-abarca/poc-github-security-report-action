@@ -4,7 +4,7 @@ import * as core from '@actions/core';
 import { Octokit } from '@octokit/rest';
 
 // Test, remove:
-import { createPDF } from 'pdf/pdfWriter';
+import { createPDF } from './pdf/pdfWriter';
 
 async function run(): Promise<void> {
   try {
