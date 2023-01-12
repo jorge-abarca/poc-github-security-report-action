@@ -17,7 +17,18 @@ export function createPDF(html: string, file: string): Promise<string> {
       console.timeEnd("download");
       console.log("Launching...");
       console.time("launch");
-      return puppeteer.launch({executablePath: revisionInfo.executablePath})
+      return puppeteer.launch({
+        executablePath: revisionInfo.executablePath,
+        headless: true,
+        devtools: true,
+        args: [
+          '--ignore-certificate-errors',
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-accelerated-2d-canvas',
+          '--disable-gpu'
+              ]
+        })
         .then(browser => {
           console.log("launched!");
           console.timeEnd("launch");
