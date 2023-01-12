@@ -651,18 +651,21 @@ function run() {
                     name: getRequiredInputValue('template')
                 }
             });
-            console.log("Running gnerator v0.8...");
+            console.log("Running generator v0.9...");
             // Test PDF:
             console.log("creating test pdf...");
-            yield pdfWriter_1.createPDF('<html><body><h1>Hello World</h1></body>', 'test.pdf');
+            yield pdfWriter_1.createPDF('<html><body><h1>Hello World</h1></body></html>', 'test.pdf');
             console.log("done...");
+            console.log("running generator...");
             const file = yield generator.run();
             console.log("generated report: ", file);
         }
         catch (err) {
+            console.log("an error has occurred: " + err.message);
             console.error(err);
             core.setFailed(err.message);
         }
+        console.log("execution completed!");
     });
 }
 run();
