@@ -10,7 +10,7 @@ describe('pdfWriter', function () {
 
   it('should generate a simple pdf', async () => {
     console.log("testing generating a simple file");
-    const html = '<html><body><h1>Hello World</h1></body>'
+    const html = '<html><body><h1>Hello World</h1></body></html>'
       , file = getTestDirectoryFilePath('test.pdf')
     ;
 
