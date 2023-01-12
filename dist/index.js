@@ -722,16 +722,34 @@ function createPDF(html, file) {
                     console.log("Saving as pdf...");
                     console.timeEnd("save pdf");
                     return page.pdf({ path: file, format: 'A4' });
+                })
+                    .catch((error) => {
+                    console.error(error);
+                    return Promise.reject(error);
                 });
+            })
+                .catch((error) => {
+                console.timeEnd("set content");
+                console.error(error);
+                return Promise.reject(error);
             })
                 .then(() => {
                 console.log("Closing browser...");
                 return browser.close();
             });
         })
+            .catch((error) => {
+            console.timeEnd("browser.newPage();");
+            console.error(error);
+            return Promise.reject(error);
+        })
             .then(() => {
             console.log("Returning file..");
             return file;
+        })
+            .catch((error) => {
+            console.error(error);
+            return Promise.reject(error);
         });
     });
 }
