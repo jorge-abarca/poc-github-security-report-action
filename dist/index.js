@@ -751,6 +751,10 @@ function createPDF(html, file) {
             console.error(error);
             return Promise.reject(error);
         });
+    })
+        .catch((error) => {
+        console.error(error);
+        return Promise.reject(error);
     });
 }
 exports.createPDF = createPDF;
